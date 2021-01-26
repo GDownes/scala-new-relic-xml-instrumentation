@@ -1,2 +1,4 @@
 # new-relic-akka-http
-new-relic akka-http demo
+To configure agent path set `newrelicAgentPath` in `build.sbt`
+
+To run project use `sbt run`
