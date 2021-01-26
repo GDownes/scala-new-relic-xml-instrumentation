@@ -11,6 +11,9 @@ final case class User(name: String, age: Int, countryOfResidence: String)
 final case class Users(users: immutable.Seq[User])
 //#user-case-classes
 
+final case class GetUserResponse(maybeUser: Option[User])
+final case class ActionPerformed(description: String)
+
 object UserRegistry {
   // actor protocol
   sealed trait Command
@@ -18,9 +21,6 @@ object UserRegistry {
   final case class CreateUser(user: User, replyTo: ActorRef[ActionPerformed])   extends Command
   final case class GetUser(name: String, replyTo: ActorRef[GetUserResponse])    extends Command
   final case class DeleteUser(name: String, replyTo: ActorRef[ActionPerformed]) extends Command
-
-  final case class GetUserResponse(maybeUser: Option[User])
-  final case class ActionPerformed(description: String)
 
   def apply(): Behavior[Command] = registry(Set.empty)
 

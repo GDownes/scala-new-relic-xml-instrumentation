@@ -30,9 +30,10 @@ object QuickstartApp {
     //#server-bootstrapping
     val rootBehavior = Behaviors.setup[Nothing] { context =>
       val userRegistryActor = context.spawn(UserRegistry(), "UserRegistryActor")
+      val userService       = new UserRegistryService(userRegistryActor)(context.system)
       context.watch(userRegistryActor)
 
-      val routes = new UserRoutes(userRegistryActor)(context.system)
+      val routes = new UserRoutes(userService)(context.system)
       startHttpServer(routes.userRoutes)(context.system)
 
       Behaviors.empty
