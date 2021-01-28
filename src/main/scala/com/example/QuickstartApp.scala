@@ -7,6 +7,7 @@ import akka.http.scaladsl.server.Route
 
 import scala.util.Failure
 import scala.util.Success
+import concurrent.duration._
 
 //#main-class
 object QuickstartApp {
@@ -30,7 +31,8 @@ object QuickstartApp {
     //#server-bootstrapping
     val rootBehavior = Behaviors.setup[Nothing] { context =>
       val userRegistryActor = context.spawn(UserRegistry(), "UserRegistryActor")
-      val userService       = new UserRegistryService(userRegistryActor)(context.system)
+      // val userService       = new UserRegistryService(userRegistryActor)(context.system)
+      val userService = new SlowUserService(1.seconds)
       context.watch(userRegistryActor)
 
       val routes = new UserRoutes(userService)(context.system)
