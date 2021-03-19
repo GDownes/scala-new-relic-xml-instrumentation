@@ -10,13 +10,13 @@ import scala.util.Success
 import concurrent.duration._
 
 //#main-class
-object QuickstartApp {
+object TraceApp {
   //#start-http-server
   private def startHttpServer(routes: Route)(implicit system: ActorSystem[_]): Unit = {
     // Akka HTTP still needs a classic ActorSystem to start
     import system.executionContext
 
-    val futureBinding = Http().newServerAt("localhost", 8080).bind(routes)
+    val futureBinding = Http().newServerAt("localhost", 9090).bind(routes)
     futureBinding.onComplete {
       case Success(binding) =>
         val address = binding.localAddress
@@ -30,17 +30,12 @@ object QuickstartApp {
   def main(args: Array[String]): Unit = {
     //#server-bootstrapping
     val rootBehavior = Behaviors.setup[Nothing] { context =>
-      val userRegistryActor = context.spawn(UserRegistry(), "UserRegistryActor")
-      // val userService       = new UserRegistryService(userRegistryActor)(context.system)
-      val userService = new SlowUserService(1.seconds)
-      context.watch(userRegistryActor)
-
-      val routes = new UserRoutes(userService)(context.system)
-      startHttpServer(routes.userRoutes)(context.system)
+      val routes = new TraceRoutes()(context.system)
+      startHttpServer(routes.traceRoutes)(context.system)
 
       Behaviors.empty
     }
-    val system = ActorSystem[Nothing](rootBehavior, "HelloAkkaHttpServer")
+    val system = ActorSystem[Nothing](rootBehavior, "TraceAkkaHttpServer")
     //#server-bootstrapping
   }
 }
