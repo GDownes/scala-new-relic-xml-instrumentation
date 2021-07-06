@@ -1,9 +1,9 @@
 lazy val akkaHttpVersion = "10.2.3"
 lazy val akkaVersion     = "2.6.11"
 lazy val monixVersion    = "3.3.0"
-lazy val newRelicVersion = "6.3.0"
+lazy val newRelicVersion = "7.1.0-SNAPSHOT"
 
-lazy val newrelicAgentPath = "/opt/newrelic/newrelic.jar"
+lazy val newrelicAgentPath = "/home/gdownes/dev/newrelic-java-agent/newrelic-agent/build/newrelicJar/newrelic.jar"
 
 lazy val root = (project in file(".")).settings(
   inThisBuild(
@@ -12,6 +12,7 @@ lazy val root = (project in file(".")).settings(
       scalaVersion := "2.13.4"
     )
   ),
+  resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   scalafmtOnCompile := true,
   name := "new-relic-http",
   libraryDependencies ++= Seq(
@@ -29,4 +30,4 @@ lazy val root = (project in file(".")).settings(
 )
 
 Compile / run / fork := true
-run / javaOptions += s"-javaagent:$newrelicAgentPath"
+run / javaOptions ++= Seq(s"-javaagent:$newrelicAgentPath", "-Dnewrelic.config.log_level=FINEST")
