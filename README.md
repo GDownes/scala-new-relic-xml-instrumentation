@@ -3,4 +3,4 @@ To configure agent path set `newrelicAgentPath` in `build.sbt`
 
 Create extensions folder in `newrelicAgentPath` location and add xml configuration `extension.xml`
 
-To run project use `sbt run`
+To run the project use `sbt run` and execute the `traceRun.sh` script to simulate HTTP requests.
